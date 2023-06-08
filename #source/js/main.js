@@ -17,17 +17,12 @@ const ImageZoom = () => {
 		const [zoomedImg, zoomLens] = createActionElements();
 		setActionElementsSize();
 
-		// window.addEventListener('mousewheel', (e) => {
-		//		console.log(e.clientY, window.pageYOffset);
-		// 	getSetLensPos(e)
-		// });
-		// window.addEventListener('mousewheel', getSetLensPos);
-
 		containerImg.addEventListener('mouseenter', () => {
 			container.classList.add('mouse-over');
 
 			containerImg.addEventListener('mousemove', getSetLensPos)
 			containerImg.addEventListener('mousewheel', zoomImage)
+			containerImg.addEventListener('click', initFullScreenSlider)
 		});
 
 		containerImg.addEventListener('mouseleave', () => {
@@ -115,6 +110,60 @@ const ImageZoom = () => {
 			${containerImg.offsetWidth * zoomFactorX / zoomLevel}px 
 			${containerImg.offsetHeight * zoomFactorY / zoomLevel}px
 		`;
+		}
+
+		function initFullScreenSlider(e) {
+			createFullScreenSlider(e);
+
+			document.body.classList.add('fixed');
+
+			closeSlider();
+		}
+
+		// fullScreenImg
+		function createFullScreenSlider(e) {
+			//Add slider container
+			const fullScreenContainer = document.createElement('div');
+			fullScreenContainer.classList.add('fullscreen-container');
+			const fullScreenBg = document.createElement('div');
+			fullScreenBg.classList.add('fullscreen-bg');
+			const fullScreenSlider = document.createElement('div');
+			fullScreenSlider.classList.add('fullScreen-slider');
+
+			//Add slider container to page
+			document.body.appendChild(fullScreenContainer);
+			fullScreenContainer.appendChild(fullScreenBg);
+			fullScreenContainer.appendChild(fullScreenSlider);
+
+			imgSlider([...containers], fullScreenSlider);
+		}
+
+		function imgSlider(containers, fullScreenSlider) {
+			containers.forEach((container, i) => {
+				const slide = document.createElement('div');
+				slide.classList.add('slider-slide');
+				const slideImg = document.createElement('img');
+				slideImg.classList.add('slide-img');
+
+				const parentImg = container.querySelector('img');
+
+				slide.setAttribute('aria-order', i);
+				slideImg.src = `${parentImg.src}`;
+
+				fullScreenSlider.appendChild(slide);
+				slide.appendChild(slideImg);
+			});
+		}
+
+		function closeSlider() {
+			const fullScreenSlider = document.querySelector('.fullscreen-container');
+
+			fullScreenSlider.addEventListener('click', function (e) {
+				if (!e.target.closest('.fullScreen-slider')) {
+					fullScreenSlider.remove()
+					document.body.classList.remove('fixed');
+				}
+			});
 		}
 	});
 };

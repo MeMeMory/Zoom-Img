@@ -9,6 +9,10 @@ body {
 	font-family: 'Montserrat';
 	overflow-x: hidden;
 	overflow-y: scroll;
+
+	&.fixed {
+		overflow: hidden;
+	}
 }
 
 .main-wrapper {
