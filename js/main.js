@@ -17,17 +17,12 @@ const ImageZoom = () => {
 		const [zoomedImg, zoomLens] = createActionElements();
 		setActionElementsSize();
 
-		// window.addEventListener('mousewheel', (e) => {
-		//		console.log(e.clientY, window.pageYOffset);
-		// 	getSetLensPos(e)
-		// });
-		// window.addEventListener('mousewheel', getSetLensPos);
-
 		containerImg.addEventListener('mouseenter', () => {
 			container.classList.add('mouse-over');
 
 			containerImg.addEventListener('mousemove', getSetLensPos)
 			containerImg.addEventListener('mousewheel', zoomImage)
+
 		});
 
 		containerImg.addEventListener('mouseleave', () => {
@@ -36,6 +31,8 @@ const ImageZoom = () => {
 			containerImg.removeEventListener('mousemove', getSetLensPos)
 			containerImg.removeEventListener('mousewheel', zoomImage)
 		});
+
+		containerImg.addEventListener('click', initFullScreenSlider);
 
 		function createActionElements() {
 			const zoomedImg = document.createElement('div');
@@ -116,8 +113,98 @@ const ImageZoom = () => {
 			${containerImg.offsetHeight * zoomFactorY / zoomLevel}px
 		`;
 		}
+
+
+		function initFullScreenSlider(e) {
+			createFullScreenSlider(e);
+
+			document.body.classList.add('fixed');
+
+			closeSlider();
+			sliderInteractions()
+		}
+
+		function createFullScreenSlider(e) {
+			//Add slider container
+			const fullScreenContainer = document.createElement('div');
+			fullScreenContainer.classList.add('fullscreen-container');
+			const fullScreenBg = document.createElement('div');
+			fullScreenBg.classList.add('fullscreen-bg');
+			const fullScreenSlider = document.createElement('div');
+			fullScreenSlider.classList.add('fullScreen-slider');
+			const sliderWrapper = document.createElement('div');
+			sliderWrapper.classList.add('slider-wrapper');
+
+			//Add slider container to page
+			document.body.appendChild(fullScreenContainer);
+			fullScreenContainer.appendChild(fullScreenBg);
+			fullScreenContainer.appendChild(fullScreenSlider);
+			fullScreenSlider.appendChild(sliderWrapper);
+
+			imgSlider([...containers], sliderWrapper);
+		}
+
+		function imgSlider(containers, sliderWrapper) {
+			containers.forEach((container, i) => {
+				const slide = document.createElement('div');
+				slide.classList.add('slider-slide');
+				const slideImg = document.createElement('img');
+				slideImg.classList.add('slide-img');
+
+				const parentImg = container.querySelector('img');
+
+				slide.setAttribute('aria-order', i);
+				slideImg.src = `${parentImg.src}`;
+
+				sliderWrapper.appendChild(slide);
+				slide.appendChild(slideImg);
+			});
+		}
+
+		function closeSlider() {
+			const fullScreenSlider = document.querySelector('.fullscreen-container');
+
+			fullScreenSlider.addEventListener('click', function (e) {
+				if (!e.target.closest('.fullScreen-slider')) {
+					fullScreenSlider.remove()
+					document.body.classList.remove('fixed');
+				}
+			});
+		}
+
+		function sliderInteractions() {
+			const slider = document.querySelector('.fullScreen-slider');
+			const sliderWrapper = slider.querySelector('.slider-wrapper');
+			const sliderSlides = slider.querySelectorAll('.slider-slide');
+			const computed = etComputedStyle(sliderSlides[0])
+			const compWidth = Number(computed.width.slice(0, -2))
+			const compMarginRight = Number(computed.marginRight.slice(0, -2))
+			let currentIndex = 0;
+
+			slider.addEventListener('mousewheel', function (e) {
+				e.preventDefault();
+				(e.deltaY < 0) ? previousSlide() : nextSlide()
+			});
+
+			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * compWidth + compMarginRight}px)`
+
+			function nextSlide() {
+				currentIndex++;
+				if (currentIndex >= sliderSlides.length) currentIndex = 0;
+				showSlide(currentIndex);
+			}
+
+			function previousSlide() {
+				currentIndex--;
+				if (currentIndex < 0) currentIndex = sliderSlides.length - 1;
+				showSlide(currentIndex);
+			}
+		}
 	});
 };
+
+
+
 
 
 

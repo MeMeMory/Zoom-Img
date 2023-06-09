@@ -80,6 +80,9 @@ body {
 	overflow-x: hidden;
 	overflow-y: scroll;
 }
+body.fixed {
+	overflow: hidden;
+}
 
 .main-wrapper {
 	display: -webkit-box;
@@ -143,16 +146,14 @@ body {
 	width: 10rem;
 	height: 30rem;
 }
-
-.zoom-image {
+.image-container .zoom-image {
 	width: 100%;
 	max-width: 100%;
 	height: auto;
 	-webkit-box-shadow: 0px 0px 0px 1px darkcyan;
 	        box-shadow: 0px 0px 0px 1px darkcyan;
 }
-
-.zoom-lens {
+.image-container .zoom-lens {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -162,8 +163,7 @@ body {
 	opacity: 0;
 	pointer-events: none;
 }
-
-.zoomed-img {
+.image-container .zoomed-img {
 	position: absolute;
 	top: 0;
 	right: 0;
@@ -177,7 +177,7 @@ body {
 	opacity: 0;
 	pointer-events: none;
 }
-.zoomed-img div {
+.image-container .zoomed-img div {
 	position: absolute;
 	left: 50%;
 	-webkit-transform: translateX(-50%);
@@ -185,6 +185,76 @@ body {
 	        transform: translateX(-50%);
 	-webkit-box-shadow: 0px 0px 0px 1px darkcyan;
 	        box-shadow: 0px 0px 0px 1px darkcyan;
+}
+
+.fullscreen-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	height: 100dvh;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	z-index: 10;
+}
+.fullscreen-container .fullscreen-bg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(31, 34, 37, 0.7);
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+.fullscreen-container .fullScreen-slider {
+	gap: 2rem;
+	z-index: 1;
+	background: #ffffff;
+	width: 56rem;
+	border-radius: 0.3rem;
+	overflow: hidden;
+}
+.fullscreen-container .slider-wrapper {
+	width: 100%;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: stretch;
+	    -ms-flex-align: stretch;
+	        align-items: stretch;
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+.fullscreen-container .slider-slide {
+	width: 56rem;
+	-ms-flex-negative: 0;
+	    flex-shrink: 0;
+	margin-right: 5rem;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	overflow: hidden;
+}
+.fullscreen-container .slider-slide img {
+	width: 100%;
+	height: 100%;
 }
 
 @-webkit-keyframes zoomAnimation {

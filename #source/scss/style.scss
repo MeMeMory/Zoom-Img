@@ -37,45 +37,100 @@
 			height: 30rem;
 		}
 	}
-}
 
-.zoom-image {
-	width: 100%;
-	max-width: 100%;
-	height: auto;
-	box-shadow: 0px 0px 0px 1px darkcyan;
-}
-
-.zoom-lens {
-	position: absolute;
-	top: 0;
-	left: 0;
-	background: rgba(#d5f8eb, .3);
-	border: 1px solid rgba(#cbcbcb, .8);
-	visibility: hidden;
-	opacity: 0;
-	pointer-events: none;
-}
-
-.zoomed-img {
-	position: absolute;
-	top: 0;
-	right: 0;
-	transform: translateX(110%);
-	box-shadow: 0px 0px 0px 2px rgb(160, 11, 219);
-	background: rgba(#ffffff, .3);
-	visibility: hidden;
-	opacity: 0;
-	pointer-events: none;
-
-	div {
-		position: absolute;
-		left: 50%;
-		transform: translateX(-50%);
+	.zoom-image {
+		width: 100%;
+		max-width: 100%;
+		height: auto;
 		box-shadow: 0px 0px 0px 1px darkcyan;
+	}
+
+	.zoom-lens {
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: rgba(#d5f8eb, .3);
+		border: 1px solid rgba(#cbcbcb, .8);
+		visibility: hidden;
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.zoomed-img {
+		position: absolute;
+		top: 0;
+		right: 0;
+		transform: translateX(110%);
+		box-shadow: 0px 0px 0px 2px rgb(160, 11, 219);
+		background: rgba(#ffffff, .3);
+		visibility: hidden;
+		opacity: 0;
+		pointer-events: none;
+
+		div {
+			position: absolute;
+			left: 50%;
+			transform: translateX(-50%);
+			box-shadow: 0px 0px 0px 1px darkcyan;
+		}
 	}
 }
 
+
+.fullscreen-container {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	height: 100dvh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 10;
+
+	.fullscreen-bg {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: rgba(#1F2225, .7);
+		transition: all .3s ease-in-out;
+	}
+
+	.fullScreen-slider {
+		gap: 2rem;
+		z-index: 1;
+		background: #ffffff;
+		width: 56rem;
+		// padding: 5rem;
+		border-radius: .3rem;
+		overflow: hidden;
+	}
+
+	.slider-wrapper {
+		width: 100%;
+		display: flex;
+		align-items: stretch;
+		transition: all .3s ease-in-out;
+	}
+
+	.slider-slide {
+		width: 56rem;
+		flex-shrink: 0;
+		margin-right: 5rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		overflow: hidden;
+
+		img {
+			width: 100%;
+			height: 100%;
+		}
+	}
+}
 
 
 @keyframes zoomAnimation {
