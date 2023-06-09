@@ -22,7 +22,7 @@ const ImageZoom = () => {
 
 			containerImg.addEventListener('mousemove', getSetLensPos)
 			containerImg.addEventListener('mousewheel', zoomImage)
-			containerImg.addEventListener('click', initFullScreenSlider)
+
 		});
 
 		containerImg.addEventListener('mouseleave', () => {
@@ -31,6 +31,8 @@ const ImageZoom = () => {
 			containerImg.removeEventListener('mousemove', getSetLensPos)
 			containerImg.removeEventListener('mousewheel', zoomImage)
 		});
+
+		containerImg.addEventListener('click', initFullScreenSlider);
 
 		function createActionElements() {
 			const zoomedImg = document.createElement('div');
@@ -112,15 +114,16 @@ const ImageZoom = () => {
 		`;
 		}
 
+
 		function initFullScreenSlider(e) {
 			createFullScreenSlider(e);
 
 			document.body.classList.add('fixed');
 
 			closeSlider();
+			sliderInteractions()
 		}
 
-		// fullScreenImg
 		function createFullScreenSlider(e) {
 			//Add slider container
 			const fullScreenContainer = document.createElement('div');
@@ -129,16 +132,19 @@ const ImageZoom = () => {
 			fullScreenBg.classList.add('fullscreen-bg');
 			const fullScreenSlider = document.createElement('div');
 			fullScreenSlider.classList.add('fullScreen-slider');
+			const sliderWrapper = document.createElement('div');
+			sliderWrapper.classList.add('slider-wrapper');
 
 			//Add slider container to page
 			document.body.appendChild(fullScreenContainer);
 			fullScreenContainer.appendChild(fullScreenBg);
 			fullScreenContainer.appendChild(fullScreenSlider);
+			fullScreenSlider.appendChild(sliderWrapper);
 
-			imgSlider([...containers], fullScreenSlider);
+			imgSlider([...containers], sliderWrapper);
 		}
 
-		function imgSlider(containers, fullScreenSlider) {
+		function imgSlider(containers, sliderWrapper) {
 			containers.forEach((container, i) => {
 				const slide = document.createElement('div');
 				slide.classList.add('slider-slide');
@@ -150,7 +156,7 @@ const ImageZoom = () => {
 				slide.setAttribute('aria-order', i);
 				slideImg.src = `${parentImg.src}`;
 
-				fullScreenSlider.appendChild(slide);
+				sliderWrapper.appendChild(slide);
 				slide.appendChild(slideImg);
 			});
 		}
@@ -165,8 +171,40 @@ const ImageZoom = () => {
 				}
 			});
 		}
+
+		function sliderInteractions() {
+			const slider = document.querySelector('.fullScreen-slider');
+			const sliderWrapper = slider.querySelector('.slider-wrapper');
+			const sliderSlides = slider.querySelectorAll('.slider-slide');
+			const computed = etComputedStyle(sliderSlides[0])
+			const compWidth = Number(computed.width.slice(0, -2))
+			const compMarginRight = Number(computed.marginRight.slice(0, -2))
+			let currentIndex = 0;
+
+			slider.addEventListener('mousewheel', function (e) {
+				e.preventDefault();
+				(e.deltaY < 0) ? previousSlide() : nextSlide()
+			});
+
+			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * compWidth + compMarginRight}px)`
+
+			function nextSlide() {
+				currentIndex++;
+				if (currentIndex >= sliderSlides.length) currentIndex = 0;
+				showSlide(currentIndex);
+			}
+
+			function previousSlide() {
+				currentIndex--;
+				if (currentIndex < 0) currentIndex = sliderSlides.length - 1;
+				showSlide(currentIndex);
+			}
+		}
 	});
 };
+
+
+
 
 
 
