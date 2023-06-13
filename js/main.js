@@ -135,13 +135,64 @@ const ImageZoom = () => {
 			const sliderWrapper = document.createElement('div');
 			sliderWrapper.classList.add('slider-wrapper');
 
+			//Add slider arrows
+			const [sliderArrowsContainer, arrowRight, arrowLeft, arrowWrapperRight, arrowWrapperLeft] = createArrows();
+
 			//Add slider container to page
 			document.body.appendChild(fullScreenContainer);
 			fullScreenContainer.appendChild(fullScreenBg);
 			fullScreenContainer.appendChild(fullScreenSlider);
 			fullScreenSlider.appendChild(sliderWrapper);
+			fullScreenSlider.appendChild(sliderArrowsContainer);
+			sliderArrowsContainer.appendChild(arrowWrapperRight);
+			sliderArrowsContainer.appendChild(arrowWrapperLeft);
+			arrowWrapperRight.appendChild(arrowRight);
+			arrowWrapperLeft.appendChild(arrowLeft);
+			arrowRight.appendChild(arrowSvg(arrowWrapperRight));
+			arrowLeft.appendChild(arrowSvg(arrowWrapperLeft));
 
 			imgSlider([...containers], sliderWrapper);
+		}
+
+		function createArrows() {
+			const sliderArrowsContainer = document.createElement('div');
+			sliderArrowsContainer.classList.add('slider-arrows');
+
+			const arrowWrapperRight = document.createElement('div');
+			arrowWrapperRight.classList.add('arrow-цrapper');
+			arrowWrapperRight.classList.add('arrow-right');
+
+			const arrowWrapperLeft = document.createElement('div');
+			arrowWrapperLeft.classList.add('arrow-цrapper');
+			arrowWrapperLeft.classList.add('arrow-left');
+
+			const arrowRight = document.createElement('div');
+			const arrowLeft = document.createElement('div');
+
+			return [sliderArrowsContainer, arrowRight, arrowLeft, arrowWrapperRight, arrowWrapperLeft];
+		}
+
+		function arrowSvg(arrow) {
+			const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			const iconPath = document.createElementNS(
+				'http://www.w3.org/2000/svg',
+				'path'
+			);
+			svg.setAttribute('viewBox', '0 0 24 24');
+			iconPath.setAttribute('fill', 'rgb(200, 200, 200)');
+
+			arrow.classList.contains('arrow-right')
+				? iconPath.setAttribute(
+					'd',
+					'M15.4 12.97l-2.68 2.72 1.34 1.38L19 12l-4.94-5.07-1.34 1.38 2.68 2.72H5v1.94z'
+				)
+				: iconPath.setAttribute(
+					'd',
+					'M11.28 15.7l-1.34 1.37L5 12l4.94-5.07 1.34 1.38-2.68 2.72H19v1.94H8.6z'
+				)
+
+			svg.appendChild(iconPath);
+			return svg;
 		}
 
 		function imgSlider(containers, sliderWrapper) {
@@ -176,17 +227,32 @@ const ImageZoom = () => {
 			const slider = document.querySelector('.fullScreen-slider');
 			const sliderWrapper = slider.querySelector('.slider-wrapper');
 			const sliderSlides = slider.querySelectorAll('.slider-slide');
-			const computed = etComputedStyle(sliderSlides[0])
+			const sliderArrows = slider.querySelectorAll('.slider-arrows div');
+			const computed = getComputedStyle(sliderSlides[0])
 			const compWidth = Number(computed.width.slice(0, -2))
 			const compMarginRight = Number(computed.marginRight.slice(0, -2))
 			let currentIndex = 0;
 
 			slider.addEventListener('mousewheel', function (e) {
 				e.preventDefault();
+				console.log(compWidth, compMarginRight);
 				(e.deltaY < 0) ? previousSlide() : nextSlide()
 			});
 
-			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * compWidth + compMarginRight}px)`
+			sliderArrows.forEach(arr => {
+				arr.addEventListener('click', (e) => {
+					e.stopPropagation();
+					if (e.target.classList.contains('arrow-right')) {
+						nextSlide()
+					}
+					if (e.target.classList.contains('arrow-left')) {
+						previousSlide()
+					}
+				})
+			})
+
+
+			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * (compWidth + compMarginRight)}px)`
 
 			function nextSlide() {
 				currentIndex++;
@@ -209,6 +275,6 @@ const ImageZoom = () => {
 
 
 //Init functions
-window.addEventListener('load', (e) => {
+window.addEventListener('load', () => {
 	ImageZoom();
 });

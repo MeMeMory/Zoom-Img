@@ -217,7 +217,6 @@ body.fixed {
 	transition: all 0.3s ease-in-out;
 }
 .fullscreen-container .fullScreen-slider {
-	gap: 2rem;
 	z-index: 1;
 	background: #ffffff;
 	width: 56rem;
@@ -255,6 +254,57 @@ body.fixed {
 .fullscreen-container .slider-slide img {
 	width: 100%;
 	height: 100%;
+}
+.fullscreen-container .slider-arrows > div {
+	position: absolute;
+	top: 50%;
+	cursor: pointer;
+	border-radius: 0.5rem;
+	width: 8rem;
+	height: 8rem;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+}
+.fullscreen-container .slider-arrows > div > div {
+	width: 50%;
+	height: 50%;
+	border-radius: 0.5rem;
+	background: rgba(0, 0, 0, 0.5);
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	pointer-events: none;
+}
+.fullscreen-container .slider-arrows > div > div:hover svg path {
+	fill: rgb(255, 255, 255);
+}
+.fullscreen-container .slider-arrows > div svg {
+	width: 75%;
+	height: 75%;
+}
+.fullscreen-container .slider-arrows > div svg path {
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
+}
+.fullscreen-container .arrow-right {
+	right: 2.5rem;
+}
+.fullscreen-container .arrow-left {
+	left: 2.5rem;
 }
 
 @-webkit-keyframes zoomAnimation {
