@@ -109,11 +109,13 @@ body.fixed {
 	    -ms-flex-align: center;
 	        align-items: center;
 	-webkit-box-orient: vertical;
-	-webkit-box-direction: normal;
-	    -ms-flex-direction: column;
-	        flex-direction: column;
+	-webkit-box-direction: reverse;
+	    -ms-flex-direction: column-reverse;
+	        flex-direction: column-reverse;
 	gap: 5rem;
 	margin: 2.5rem 0;
+	max-width: 144rem;
+	margin: 5rem auto;
 }
 
 .image-container {
@@ -121,8 +123,6 @@ body.fixed {
 	margin: 0 auto;
 	width: 50rem;
 	height: 40rem;
-	-webkit-box-shadow: 0px 0px 0px 5px darkcyan;
-	        box-shadow: 0px 0px 0px 5px darkcyan;
 	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
@@ -142,23 +142,16 @@ body.fixed {
 	-webkit-animation: zoomAnimation 0.3s ease-in-out forwards;
 	        animation: zoomAnimation 0.3s ease-in-out forwards;
 }
-.image-container:nth-of-type(3) img {
-	width: 10rem;
-	height: 30rem;
-}
 .image-container .zoom-image {
-	width: 100%;
 	max-width: 100%;
-	height: auto;
-	-webkit-box-shadow: 0px 0px 0px 1px darkcyan;
-	        box-shadow: 0px 0px 0px 1px darkcyan;
+	max-height: 100%;
 }
 .image-container .zoom-lens {
 	position: absolute;
 	top: 0;
 	left: 0;
-	background: rgba(213, 248, 235, 0.3);
-	border: 1px solid rgba(203, 203, 203, 0.8);
+	background: rgba(0, 139, 139, 0.3);
+	border: 1px solid rgba(0, 139, 139, 0.8);
 	visibility: hidden;
 	opacity: 0;
 	pointer-events: none;
@@ -170,8 +163,8 @@ body.fixed {
 	-webkit-transform: translateX(110%);
 	    -ms-transform: translateX(110%);
 	        transform: translateX(110%);
-	-webkit-box-shadow: 0px 0px 0px 2px rgb(160, 11, 219);
-	        box-shadow: 0px 0px 0px 2px rgb(160, 11, 219);
+	-webkit-box-shadow: 0px 0px 0px 2px darkcyan;
+	        box-shadow: 0px 0px 0px 2px darkcyan;
 	background: rgba(255, 255, 255, 0.3);
 	visibility: hidden;
 	opacity: 0;
@@ -217,10 +210,10 @@ body.fixed {
 	transition: all 0.3s ease-in-out;
 }
 .fullscreen-container .fullScreen-slider {
-	z-index: 1;
-	background: #ffffff;
 	width: 56rem;
+	background: #ffffff;
 	border-radius: 0.3rem;
+	z-index: 1;
 	overflow: hidden;
 }
 .fullscreen-container .slider-wrapper {
@@ -237,6 +230,7 @@ body.fixed {
 }
 .fullscreen-container .slider-slide {
 	width: 56rem;
+	aspect-ratio: 1.2/1;
 	-ms-flex-negative: 0;
 	    flex-shrink: 0;
 	margin-right: 5rem;
@@ -252,8 +246,8 @@ body.fixed {
 	overflow: hidden;
 }
 .fullscreen-container .slider-slide img {
-	width: 100%;
-	height: 100%;
+	max-width: 100%;
+	max-height: 100%;
 }
 .fullscreen-container .slider-arrows > div {
 	position: absolute;

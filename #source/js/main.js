@@ -5,7 +5,7 @@ const ImageZoom = () => {
 	const minZoom = 0.2;
 	const maxZoom = 1;
 	let defZoomLevel = 0.5;
-	const zoomedScale = 0.5;
+	const zoomedScale = .8;
 
 	[...containers].forEach(container => {
 		const containerImg = container.querySelector('img');
@@ -74,13 +74,13 @@ const ImageZoom = () => {
 		}
 
 		function getSetLensPos(e) {
-			e = e || window.event;
 			imgRect = containerImg.getBoundingClientRect();
 			let mouseX = e.pageX - imgRect.left;
 			let mouseY = e.pageY - imgRect.top;
-			/* Consider any page scrolling: */
-			mouseX = mouseX - window.pageXOffset;
-			mouseY = mouseY - window.pageYOffset;
+
+			// Consider any page scrolling:
+			mouseX = mouseX - window.scrollX;
+			mouseY = mouseY - window.scrollY;
 
 			const zoomLensX = mouseX - zoomLens.offsetWidth / 2;
 			const zoomLensY = mouseY - zoomLens.offsetHeight / 2;
@@ -270,11 +270,32 @@ const ImageZoom = () => {
 };
 
 
+// const testing = () => {
+// 	const testContainer = document.querySelector('.test-urls');
 
+// 	testContainer.querySelector('button').addEventListener('click', () => {
+// 		const inputValue = testContainer.querySelector('input').value;
+// 		const contentWrapper = document.querySelector('.content-wrapper');
+
+// 		const imgContainer = document.createElement('div');
+// 		imgContainer.classList.add('image-container');
+
+// 		const zoomedImg = document.createElement('img');
+// 		zoomedImg.classList.add('zoom-image');
+// 		zoomedImg.setAttribute('src', inputValue);
+// 		zoomedImg.setAttribute('alt', 'img');
+
+// 		contentWrapper.appendChild(imgContainer);
+// 		imgContainer.appendChild(zoomedImg);
+
+// 		ImageZoom();
+// 	})
+// }
 
 
 
 //Init functions
 window.addEventListener('load', () => {
 	ImageZoom();
+	// testing()
 });

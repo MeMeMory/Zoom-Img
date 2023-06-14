@@ -5,17 +5,45 @@
 	width: 100%;
 	display: flex;
 	align-items: center;
-	flex-direction: column;
+	flex-direction: column-reverse;
 	gap: 5rem;
 	margin: 2.5rem 0;
+	max-width: 144rem;
+	margin: 5rem auto;
 }
+
+// .test-urls {
+// 	display: flex;
+// 	align-items: center;
+// 	flex-direction: column;
+// 	justify-content: space-between;
+// 	gap: 1.6rem;
+// 	font-size: 1.6rem;
+// 	line-height: 1.2;
+// 	font-weight: 600;
+// 	margin: 2rem 0;
+
+// 	input {
+// 		width: 100%;
+// 		max-width: 40rem;
+// 		font-size: 1.6rem;
+// 		box-shadow: 0px 0px 0px 1px darkcyan;
+// 		border-radius: 1rem;
+// 		padding: .4rem 1rem;
+// 	}
+
+// 	button {
+// 		padding: .4rem 1rem;
+// 		border-radius: 2rem;
+// 		box-shadow: 0px 0px 4px darkcyan, 0px 0px 0 1px darkcyan;
+// 	}
+// }
 
 .image-container {
 	position: relative;
 	margin: 0 auto;
 	width: 50rem;
 	height: 40rem;
-	box-shadow: 0px 0px 0px 5px darkcyan;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -31,26 +59,17 @@
 		}
 	}
 
-	&:nth-of-type(3) {
-		img {
-			width: 10rem;
-			height: 30rem;
-		}
-	}
-
 	.zoom-image {
-		width: 100%;
 		max-width: 100%;
-		height: auto;
-		box-shadow: 0px 0px 0px 1px darkcyan;
+		max-height: 100%;
 	}
 
 	.zoom-lens {
 		position: absolute;
 		top: 0;
 		left: 0;
-		background: rgba(#d5f8eb, .3);
-		border: 1px solid rgba(#cbcbcb, .8);
+		background: rgba(darkcyan, .3);
+		border: 1px solid rgba(darkcyan, .8);
 		visibility: hidden;
 		opacity: 0;
 		pointer-events: none;
@@ -61,7 +80,7 @@
 		top: 0;
 		right: 0;
 		transform: translateX(110%);
-		box-shadow: 0px 0px 0px 2px rgb(160, 11, 219);
+		box-shadow: 0px 0px 0px 2px darkcyan;
 		background: rgba(#ffffff, .3);
 		visibility: hidden;
 		opacity: 0;
@@ -75,7 +94,6 @@
 		}
 	}
 }
-
 
 .fullscreen-container {
 	position: fixed;
@@ -100,10 +118,10 @@
 	}
 
 	.fullScreen-slider {
-		z-index: 1;
-		background: #ffffff;
 		width: 56rem;
+		background: #ffffff;
 		border-radius: .3rem;
+		z-index: 1;
 		overflow: hidden;
 	}
 
@@ -116,6 +134,7 @@
 
 	.slider-slide {
 		width: 56rem;
+		aspect-ratio: 1.2/1;
 		flex-shrink: 0;
 		margin-right: 5rem;
 		display: flex;
@@ -124,8 +143,8 @@
 		overflow: hidden;
 
 		img {
-			width: 100%;
-			height: 100%;
+			max-width: 100%;
+			max-height: 100%;
 		}
 	}
 
