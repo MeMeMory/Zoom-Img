@@ -5,7 +5,8 @@ const ImageZoom = () => {
 	const minZoom = 0.2;
 	const maxZoom = 1;
 	let defZoomLevel = 0.5;
-	const zoomedScale = .8;
+	const zoomedScale = 1;
+
 
 	[...containers].forEach(container => {
 		const containerImg = container.querySelector('img');
@@ -14,6 +15,10 @@ const ImageZoom = () => {
 		const defHeight = containerImg.offsetHeight;
 		let zoomLevel = defZoomLevel;
 
+		const ratioX = Number(checkRatioX(imgRect));
+		const ratioY = Number(checkRatioY(imgRect));
+
+		console.log(ratioX, ratioY);
 		const [zoomedImg, zoomLens] = createActionElements();
 		setActionElementsSize();
 
@@ -47,15 +52,15 @@ const ImageZoom = () => {
 			zoomLens.style.width = `${defWidth * zoomLevel}px`;
 			zoomLens.style.height = `${defHeight * zoomLevel}px`;
 
-			zoomedImg.style.width = `${imgRect.width * zoomedScale}px`;
-			zoomedImg.style.height = `${imgRect.height * zoomedScale}px`;
+			zoomedImg.style.width = `${imgRect.width * zoomedScale * ratioX}px`;
+			zoomedImg.style.height = `${imgRect.height * zoomedScale * ratioY}px`;
 			zoomedImg.style.background = `
-			${containerImg.width / zoomLevel}px 
-			${containerImg.height / zoomLevel}px
-			url(${containerImg.src}) 
-			rgba(255, 255, 255)
-			no-repeat
-		`;
+				${containerImg.width / zoomLevel}px 
+				${containerImg.height / zoomLevel}px
+				url(${containerImg.src}) 
+				rgba(255, 255, 255)
+				no-repeat
+			`;
 
 			container.appendChild(zoomedImg);
 			container.appendChild(zoomLens);
@@ -64,7 +69,7 @@ const ImageZoom = () => {
 		function zoomImage(e) {
 			e.preventDefault();
 			const wheelDelta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
-			zoomLevel += wheelDelta * 0.05;
+			zoomLevel -= wheelDelta * 0.05;
 			zoomLevel = Math.max(minZoom, Math.min(maxZoom, zoomLevel));
 
 			zoomLens.style.width = `${defWidth * zoomLevel}px`;
@@ -105,14 +110,23 @@ const ImageZoom = () => {
 			const zoomFactorY = zoomedImg.offsetHeight / containerImg.offsetHeight;
 
 			zoomedImg.style.backgroundPosition = `
-			-${defX / zoomLevel * zoomedScale}px 
-			-${defY / zoomLevel * zoomedScale}px
-		`;
+				-${defX / zoomLevel * zoomedScale * ratioX}px 
+				-${defY / zoomLevel * zoomedScale * ratioY}px
+			`;
 			zoomedImg.style.backgroundSize = `
-			${containerImg.offsetWidth * zoomFactorX / zoomLevel}px 
-			${containerImg.offsetHeight * zoomFactorY / zoomLevel}px
-		`;
+				${containerImg.offsetWidth * zoomFactorX / zoomLevel}px 
+				${containerImg.offsetHeight * zoomFactorY / zoomLevel}px
+			`;
 		}
+
+		function checkRatioX(imgRect) {
+			return imgRect.height / 4 > imgRect.width ? 1.5 : 1
+		}
+
+		function checkRatioY(imgRect) {
+			return imgRect.width / 4 > imgRect.height ? 1.5 : 1
+		}
+
 
 
 		function initFullScreenSlider(e) {
