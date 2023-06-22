@@ -10,52 +10,30 @@
 	margin: 2.5rem 0;
 	max-width: 144rem;
 	margin: 5rem auto;
+
 }
 
-// .test-urls {
-// 	display: flex;
-// 	align-items: center;
-// 	flex-direction: column;
-// 	justify-content: space-between;
-// 	gap: 1.6rem;
-// 	font-size: 1.6rem;
-// 	line-height: 1.2;
-// 	font-weight: 600;
-// 	margin: 2rem 0;
-
-// 	input {
-// 		width: 100%;
-// 		max-width: 40rem;
-// 		font-size: 1.6rem;
-// 		box-shadow: 0px 0px 0px 1px darkcyan;
-// 		border-radius: 1rem;
-// 		padding: .4rem 1rem;
-// 	}
-
-// 	button {
-// 		padding: .4rem 1rem;
-// 		border-radius: 2rem;
-// 		box-shadow: 0px 0px 4px darkcyan, 0px 0px 0 1px darkcyan;
-// 	}
-// }
+.container-wrapper {
+	display: flex;
+	width: 50rem;
+	overflow: auto;
+	gap: 2rem;
+	overflow: auto;
+}
 
 .image-container {
 	position: relative;
 	margin: 0 auto;
-	max-width: 50rem;
-	width: 100%;
+	width: 50rem;
+	min-width: 50rem;
 	height: 40rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	gap: 2rem;
+	flex-grow: 1;
 
 	&.mouse-over {
 		.zoom-lens {
-			animation: zoomAnimation .3s ease-in-out forwards;
-		}
-
-		.zoomed-img {
 			animation: zoomAnimation .3s ease-in-out forwards;
 		}
 	}
@@ -75,24 +53,30 @@
 		opacity: 0;
 		pointer-events: none;
 	}
+}
+
+.zoomed-container {
+	width: 50rem;
+	position: absolute;
+	top: 0;
+	right: 0;
+	box-shadow: 0px 0px 0px 2px darkcyan;
+	background: rgba(#ffffff, .3);
+	visibility: hidden;
+	opacity: 0;
+	pointer-events: none;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&.mouse-over {
+		animation: zoomAnimation .3s ease-in-out forwards;
+	}
 
 	.zoomed-img {
-		position: absolute;
-		top: 0;
-		right: 0;
-		transform: translateX(110%);
-		box-shadow: 0px 0px 0px 2px darkcyan;
-		background: rgba(#ffffff, .3);
-		visibility: hidden;
-		opacity: 0;
-		pointer-events: none;
-
-		div {
-			position: absolute;
-			left: 50%;
-			transform: translateX(-50%);
-			box-shadow: 0px 0px 0px 1px darkcyan;
-		}
+		display: none;
+		width: 100%;
+		height: 100%;
 	}
 }
 
@@ -150,7 +134,7 @@
 	}
 
 	.slider-arrows {
-		>div {
+		.arrow-wrapper {
 			position: absolute;
 			top: 50%;
 			cursor: pointer;
@@ -161,6 +145,13 @@
 			align-items: center;
 			justify-content: center;
 
+			&:hover {
+				>div {
+					background: rgba(#000000, .7);
+					filter: drop-shadow(0px 0px 2rem rgba(#000000, .7));
+				}
+			}
+
 			>div {
 				width: 50%;
 				height: 50%;
@@ -170,6 +161,7 @@
 				align-items: center;
 				justify-content: center;
 				pointer-events: none;
+				transition: all .3s ease-in-out;
 
 				&:hover {
 					svg {
@@ -199,6 +191,7 @@
 		left: 2.5rem;
 	}
 }
+
 
 
 @keyframes zoomAnimation {

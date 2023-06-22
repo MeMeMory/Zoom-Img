@@ -118,11 +118,21 @@ body.fixed {
 	margin: 5rem auto;
 }
 
+.container-wrapper {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	width: 50rem;
+	overflow: auto;
+	gap: 2rem;
+	overflow: auto;
+}
+
 .image-container {
 	position: relative;
 	margin: 0 auto;
-	max-width: 50rem;
-	width: 100%;
+	width: 50rem;
+	min-width: 50rem;
 	height: 40rem;
 	display: -webkit-box;
 	display: -ms-flexbox;
@@ -133,13 +143,11 @@ body.fixed {
 	-webkit-box-pack: center;
 	    -ms-flex-pack: center;
 	        justify-content: center;
-	gap: 2rem;
+	-webkit-box-flex: 1;
+	    -ms-flex-positive: 1;
+	        flex-grow: 1;
 }
 .image-container.mouse-over .zoom-lens {
-	-webkit-animation: zoomAnimation 0.3s ease-in-out forwards;
-	        animation: zoomAnimation 0.3s ease-in-out forwards;
-}
-.image-container.mouse-over .zoomed-img {
 	-webkit-animation: zoomAnimation 0.3s ease-in-out forwards;
 	        animation: zoomAnimation 0.3s ease-in-out forwards;
 }
@@ -157,28 +165,36 @@ body.fixed {
 	opacity: 0;
 	pointer-events: none;
 }
-.image-container .zoomed-img {
+
+.zoomed-container {
+	width: 50rem;
 	position: absolute;
 	top: 0;
 	right: 0;
-	-webkit-transform: translateX(110%);
-	    -ms-transform: translateX(110%);
-	        transform: translateX(110%);
 	-webkit-box-shadow: 0px 0px 0px 2px darkcyan;
 	        box-shadow: 0px 0px 0px 2px darkcyan;
 	background: rgba(255, 255, 255, 0.3);
 	visibility: hidden;
 	opacity: 0;
 	pointer-events: none;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
 }
-.image-container .zoomed-img div {
-	position: absolute;
-	left: 50%;
-	-webkit-transform: translateX(-50%);
-	    -ms-transform: translateX(-50%);
-	        transform: translateX(-50%);
-	-webkit-box-shadow: 0px 0px 0px 1px darkcyan;
-	        box-shadow: 0px 0px 0px 1px darkcyan;
+.zoomed-container.mouse-over {
+	-webkit-animation: zoomAnimation 0.3s ease-in-out forwards;
+	        animation: zoomAnimation 0.3s ease-in-out forwards;
+}
+.zoomed-container .zoomed-img {
+	display: none;
+	width: 100%;
+	height: 100%;
 }
 
 .fullscreen-container {
@@ -250,7 +266,7 @@ body.fixed {
 	max-width: 100%;
 	max-height: 100%;
 }
-.fullscreen-container .slider-arrows > div {
+.fullscreen-container .slider-arrows .arrow-wrapper {
 	position: absolute;
 	top: 50%;
 	cursor: pointer;
@@ -267,7 +283,12 @@ body.fixed {
 	    -ms-flex-pack: center;
 	        justify-content: center;
 }
-.fullscreen-container .slider-arrows > div > div {
+.fullscreen-container .slider-arrows .arrow-wrapper:hover > div {
+	background: rgba(0, 0, 0, 0.7);
+	-webkit-filter: drop-shadow(0px 0px 2rem rgba(0, 0, 0, 0.7));
+	        filter: drop-shadow(0px 0px 2rem rgba(0, 0, 0, 0.7));
+}
+.fullscreen-container .slider-arrows .arrow-wrapper > div {
 	width: 50%;
 	height: 50%;
 	border-radius: 0.5rem;
@@ -282,15 +303,18 @@ body.fixed {
 	    -ms-flex-pack: center;
 	        justify-content: center;
 	pointer-events: none;
+	-webkit-transition: all 0.3s ease-in-out;
+	-o-transition: all 0.3s ease-in-out;
+	transition: all 0.3s ease-in-out;
 }
-.fullscreen-container .slider-arrows > div > div:hover svg path {
+.fullscreen-container .slider-arrows .arrow-wrapper > div:hover svg path {
 	fill: rgb(255, 255, 255);
 }
-.fullscreen-container .slider-arrows > div svg {
+.fullscreen-container .slider-arrows .arrow-wrapper svg {
 	width: 75%;
 	height: 75%;
 }
-.fullscreen-container .slider-arrows > div svg path {
+.fullscreen-container .slider-arrows .arrow-wrapper svg path {
 	-webkit-transition: all 0.3s ease-in-out;
 	-o-transition: all 0.3s ease-in-out;
 	transition: all 0.3s ease-in-out;

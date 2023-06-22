@@ -6,7 +6,9 @@ const ImageZoom = () => {
 	const maxZoom = 1;
 	let defZoomLevel = 0.5;
 	const zoomedScale = 1;
+	let flag = false;
 
+	const zoomedImgContainer = document.createElement('div');
 
 	[...containers].forEach(container => {
 		const containerImg = container.querySelector('img');
@@ -18,26 +20,29 @@ const ImageZoom = () => {
 		const ratioX = Number(checkRatioX(imgRect));
 		const ratioY = Number(checkRatioY(imgRect));
 
-		console.log(ratioX, ratioY);
 		const [zoomedImg, zoomLens] = createActionElements();
-		setActionElementsSize();
+
+		setZoomLensSize();
+		setZoomedImgSize();
+		zoomedImgContainerPosSize();
 
 		containerImg.addEventListener('mouseenter', () => {
+			zoomedImgContainer.classList.add('mouse-over');
 			container.classList.add('mouse-over');
+			zoomedImg.style.display = 'block';
 
-			containerImg.addEventListener('mousemove', getSetLensPos)
-			containerImg.addEventListener('mousewheel', zoomImage)
-
+			containerImg.addEventListener('mousemove', getSetLensPos);
+			containerImg.addEventListener('mousewheel', zoomImage);
 		});
 
 		containerImg.addEventListener('mouseleave', () => {
-			container.classList.remove('mouse-over')
+			zoomedImgContainer.classList.remove('mouse-over');
+			container.classList.remove('mouse-over');
+			zoomedImg.style.display = 'none';
 
-			containerImg.removeEventListener('mousemove', getSetLensPos)
-			containerImg.removeEventListener('mousewheel', zoomImage)
+			containerImg.removeEventListener('mousemove', getSetLensPos);
+			containerImg.removeEventListener('mousewheel', zoomImage);
 		});
-
-		containerImg.addEventListener('click', initFullScreenSlider);
 
 		function createActionElements() {
 			const zoomedImg = document.createElement('div');
@@ -48,10 +53,13 @@ const ImageZoom = () => {
 			return [zoomedImg, zoomLens];
 		}
 
-		function setActionElementsSize() {
+		function setZoomLensSize() {
 			zoomLens.style.width = `${defWidth * zoomLevel}px`;
 			zoomLens.style.height = `${defHeight * zoomLevel}px`;
+			container.appendChild(zoomLens);
+		}
 
+		function setZoomedImgSize() {
 			zoomedImg.style.width = `${imgRect.width * zoomedScale * ratioX}px`;
 			zoomedImg.style.height = `${imgRect.height * zoomedScale * ratioY}px`;
 			zoomedImg.style.background = `
@@ -61,9 +69,29 @@ const ImageZoom = () => {
 				rgba(255, 255, 255)
 				no-repeat
 			`;
+			zoomedImgContainer.appendChild(zoomedImg);
+		}
 
-			container.appendChild(zoomedImg);
-			container.appendChild(zoomLens);
+		function zoomedImgContainerPosSize() {
+			if (flag == true) return
+
+			zoomedImgContainer.classList.add('zoomed-container');
+			document.querySelector('body').appendChild(zoomedImgContainer);
+			let containerRect = document.querySelector('.container-wrapper').getBoundingClientRect();
+			let imgWidths = []
+			let imgHeights = [];
+
+			[...containers].forEach(el => {
+				const imgRect = el.querySelector('img').getBoundingClientRect();
+				imgWidths.push(imgRect.width);
+				imgHeights.push(imgRect.height);
+			});
+
+			zoomedImgContainer.style.width = `${Math.max(...imgWidths)}px`;
+			zoomedImgContainer.style.height = `${Math.max(...imgHeights)}px`;
+			zoomedImgContainer.style.top = `${containerRect.top}px`
+			zoomedImgContainer.style.left = `${containerRect.right + 5}px`
+			flag = true;
 		}
 
 		function zoomImage(e) {
@@ -126,17 +154,21 @@ const ImageZoom = () => {
 		function checkRatioY(imgRect) {
 			return imgRect.width / 4 > imgRect.height ? 1.5 : 1
 		}
+	});
+};
 
+const fullScreenSlider = () => {
+	const containers = document.querySelectorAll('.image-container');
 
-
-		function initFullScreenSlider(e) {
+	[...containers].forEach(container => {
+		container.addEventListener('click', (e) => {
 			createFullScreenSlider(e);
 
 			document.body.classList.add('fixed');
 
 			closeSlider();
 			sliderInteractions()
-		}
+		})
 
 		function createFullScreenSlider(e) {
 			//Add slider container
@@ -173,11 +205,11 @@ const ImageZoom = () => {
 			sliderArrowsContainer.classList.add('slider-arrows');
 
 			const arrowWrapperRight = document.createElement('div');
-			arrowWrapperRight.classList.add('arrow-цrapper');
+			arrowWrapperRight.classList.add('arrow-wrapper');
 			arrowWrapperRight.classList.add('arrow-right');
 
 			const arrowWrapperLeft = document.createElement('div');
-			arrowWrapperLeft.classList.add('arrow-цrapper');
+			arrowWrapperLeft.classList.add('arrow-wrapper');
 			arrowWrapperLeft.classList.add('arrow-left');
 
 			const arrowRight = document.createElement('div');
@@ -262,9 +294,8 @@ const ImageZoom = () => {
 					if (e.target.classList.contains('arrow-left')) {
 						previousSlide()
 					}
-				})
-			})
-
+				});
+			});
 
 			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * (compWidth + compMarginRight)}px)`
 
@@ -281,35 +312,18 @@ const ImageZoom = () => {
 			}
 		}
 	});
-};
-
-
-// const testing = () => {
-// 	const testContainer = document.querySelector('.test-urls');
-
-// 	testContainer.querySelector('button').addEventListener('click', () => {
-// 		const inputValue = testContainer.querySelector('input').value;
-// 		const contentWrapper = document.querySelector('.content-wrapper');
-
-// 		const imgContainer = document.createElement('div');
-// 		imgContainer.classList.add('image-container');
-
-// 		const zoomedImg = document.createElement('img');
-// 		zoomedImg.classList.add('zoom-image');
-// 		zoomedImg.setAttribute('src', inputValue);
-// 		zoomedImg.setAttribute('alt', 'img');
-
-// 		contentWrapper.appendChild(imgContainer);
-// 		imgContainer.appendChild(zoomedImg);
-
-// 		ImageZoom();
-// 	})
-// }
-
-
+}
 
 //Init functions
 window.addEventListener('load', () => {
-	ImageZoom();
-	// testing()
+	if (window.innerWidth > 1199.98) {
+		setTimeout(() => {
+			ImageZoom();
+			fullScreenSlider();
+		}, 100)
+	} else {
+		setTimeout(() => {
+			fullScreenSlider();
+		}, 100)
+	}
 });
