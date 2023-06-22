@@ -32,7 +32,7 @@ const ImageZoom = () => {
 			zoomedImg.style.display = 'block';
 
 			containerImg.addEventListener('mousemove', getSetLensPos);
-			containerImg.addEventListener('mousewheel', zoomImage);
+			containerImg.addEventListener('wheel', zoomImage);
 		});
 
 		containerImg.addEventListener('mouseleave', () => {
@@ -279,7 +279,7 @@ const fullScreenSlider = () => {
 			const compMarginRight = Number(computed.marginRight.slice(0, -2))
 			let currentIndex = 0;
 
-			slider.addEventListener('mousewheel', function (e) {
+			slider.addEventListener('wheel', function (e) {
 				e.preventDefault();
 				console.log(compWidth, compMarginRight);
 				(e.deltaY < 0) ? previousSlide() : nextSlide()
