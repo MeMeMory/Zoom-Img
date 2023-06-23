@@ -13,15 +13,17 @@
 
 }
 
-.container-wrapper {
+.zoom-wrapper {
 	display: flex;
-	width: 50rem;
+	max-width: 50rem;
+	width: 100%;
+	margin-right: auto;
 	overflow: auto;
 	gap: 2rem;
 	overflow: auto;
 }
 
-.image-container {
+.zoom-container {
 	position: relative;
 	margin: 0 auto;
 	width: 50rem;
@@ -103,7 +105,8 @@
 	}
 
 	.fullScreen-slider {
-		width: 56rem;
+		max-width: 56rem;
+		width: 100%;
 		background: #ffffff;
 		border-radius: .3rem;
 		z-index: 1;
@@ -118,7 +121,7 @@
 	}
 
 	.slider-slide {
-		width: 56rem;
+		width: 100%;
 		aspect-ratio: 1.2/1;
 		flex-shrink: 0;
 		margin-right: 5rem;
@@ -144,6 +147,7 @@
 			display: flex;
 			align-items: center;
 			justify-content: center;
+			transform: translateY(-50%);
 
 			&:hover {
 				>div {
@@ -190,9 +194,49 @@
 	.arrow-left {
 		left: 2.5rem;
 	}
+
+	.close-btn {
+		position: absolute;
+		top: 2rem;
+		right: 2rem;
+		width: 3.6rem;
+		height: 3.6rem;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		border-radius: 1rem;
+		transition: all .3s ease-in-out;
+
+		&:hover {
+			background: rgba(#000, .2);
+
+		}
+	}
 }
 
+@media screen and (max-width:720px) {
+	.fullscreen-container {
+		.fullScreen-slider {
+			width: 95%;
+		}
 
+		.slider-arrows {
+			.arrow-wrapper {
+				width: 6rem;
+				height: 6rem;
+			}
+		}
+
+		.arrow-right {
+			right: 1.5rem;
+		}
+
+		.arrow-left {
+			left: 1.5rem;
+		}
+	}
+}
 
 @keyframes zoomAnimation {
 	0% {

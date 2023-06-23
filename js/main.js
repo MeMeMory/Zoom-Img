@@ -1,5 +1,5 @@
 const ImageZoom = () => {
-	const containers = document.querySelectorAll('.image-container');
+	const containers = document.querySelectorAll('.zoom-container');
 
 	// Zoom elements
 	const minZoom = 0.2;
@@ -33,16 +33,11 @@ const ImageZoom = () => {
 
 			containerImg.addEventListener('mousemove', getSetLensPos);
 			containerImg.addEventListener('wheel', zoomImage);
+
+			containerImg.addEventListener('click', removeSlider);
 		});
 
-		containerImg.addEventListener('mouseleave', () => {
-			zoomedImgContainer.classList.remove('mouse-over');
-			container.classList.remove('mouse-over');
-			zoomedImg.style.display = 'none';
-
-			containerImg.removeEventListener('mousemove', getSetLensPos);
-			containerImg.removeEventListener('mousewheel', zoomImage);
-		});
+		containerImg.addEventListener('mouseleave', removeSlider);
 
 		function createActionElements() {
 			const zoomedImg = document.createElement('div');
@@ -77,20 +72,30 @@ const ImageZoom = () => {
 
 			zoomedImgContainer.classList.add('zoomed-container');
 			document.querySelector('body').appendChild(zoomedImgContainer);
-			let containerRect = document.querySelector('.container-wrapper').getBoundingClientRect();
-			let imgWidths = []
-			let imgHeights = [];
+			let containerRect = document.querySelector('.zoom-wrapper').getBoundingClientRect();
+			/*			let imgWidths = []
+						let imgHeights = [];
+			
+						[...containers].forEach(el => {
+							const imgRect = el.querySelector('img').getBoundingClientRect();
+							imgWidths.push(imgRect.width);
+							imgHeights.push(imgRect.height);
+						});
+			
+						zoomedImgContainer.style.width = `${Math.max(...imgWidths)}px`;
+						zoomedImgContainer.style.height = `${Math.max(...imgHeights)}px`;*/
 
-			[...containers].forEach(el => {
-				const imgRect = el.querySelector('img').getBoundingClientRect();
-				imgWidths.push(imgRect.width);
-				imgHeights.push(imgRect.height);
-			});
+			zoomedImgContainer.style.width = `${containerRect.width}px`;
+			zoomedImgContainer.style.height = `${containerRect.height}px`;
 
-			zoomedImgContainer.style.width = `${Math.max(...imgWidths)}px`;
-			zoomedImgContainer.style.height = `${Math.max(...imgHeights)}px`;
-			zoomedImgContainer.style.top = `${containerRect.top}px`
-			zoomedImgContainer.style.left = `${containerRect.right + 5}px`
+			zoomedImgContainer.style.top = `${containerRect.top + 2}px`;
+			zoomedImgContainer.style.left = `${containerRect.right + 5}px`;
+
+			window.addEventListener('resize', () => {
+				let containerRect = document.querySelector('.zoom-wrapper').getBoundingClientRect();
+				zoomedImgContainer.style.top = `${containerRect.top + 2}px`;
+				zoomedImgContainer.style.left = `${containerRect.right + 5}px`;
+			})
 			flag = true;
 		}
 
@@ -154,11 +159,20 @@ const ImageZoom = () => {
 		function checkRatioY(imgRect) {
 			return imgRect.width / 4 > imgRect.height ? 1.5 : 1
 		}
+
+		function removeSlider() {
+			zoomedImgContainer.classList.remove('mouse-over');
+			container.classList.remove('mouse-over');
+			zoomedImg.style.display = 'none';
+
+			containerImg.removeEventListener('mousemove', getSetLensPos);
+			containerImg.removeEventListener('wheel', zoomImage);
+		}
 	});
 };
 
 const fullScreenSlider = () => {
-	const containers = document.querySelectorAll('.image-container');
+	const containers = document.querySelectorAll('.zoom-container');
 
 	[...containers].forEach(container => {
 		container.addEventListener('click', (e) => {
@@ -184,12 +198,16 @@ const fullScreenSlider = () => {
 			//Add slider arrows
 			const [sliderArrowsContainer, arrowRight, arrowLeft, arrowWrapperRight, arrowWrapperLeft] = createArrows();
 
+			//Add slider Close
+			const closeBtn = createCloseBtn();
+
 			//Add slider container to page
 			document.body.appendChild(fullScreenContainer);
 			fullScreenContainer.appendChild(fullScreenBg);
 			fullScreenContainer.appendChild(fullScreenSlider);
 			fullScreenSlider.appendChild(sliderWrapper);
 			fullScreenSlider.appendChild(sliderArrowsContainer);
+			fullScreenSlider.appendChild(closeBtn);
 			sliderArrowsContainer.appendChild(arrowWrapperRight);
 			sliderArrowsContainer.appendChild(arrowWrapperLeft);
 			arrowWrapperRight.appendChild(arrowRight);
@@ -239,6 +257,28 @@ const fullScreenSlider = () => {
 
 			svg.appendChild(iconPath);
 			return svg;
+		}
+
+		function createCloseBtn() {
+			const sliderClose = document.createElement('div');
+			sliderClose.classList.add('close-btn');
+
+			const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+			const iconPath = document.createElementNS(
+				'http://www.w3.org/2000/svg',
+				'path'
+			);
+			svg.setAttribute('viewBox', '0 0 24 24');
+			svg.setAttribute('width', '24');
+			svg.setAttribute('height', '24');
+			iconPath.setAttribute('fill', '#000');
+			iconPath.setAttribute(
+				'd',
+				'M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z'
+			)
+			svg.appendChild(iconPath);
+			sliderClose.appendChild(svg);
+			return sliderClose;
 		}
 
 		function imgSlider(containers, sliderWrapper) {
@@ -312,6 +352,12 @@ const fullScreenSlider = () => {
 			}
 		}
 	});
+
+
+
+
+
+
 }
 
 //Init functions
