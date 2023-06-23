@@ -337,6 +337,11 @@ const fullScreenSlider = () => {
 				});
 			});
 
+			slider.querySelector('.close-btn').addEventListener('click', () => {
+				document.querySelector('.fullscreen-container').remove()
+				document.body.classList.remove('fixed');
+			});
+
 			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * (compWidth + compMarginRight)}px)`
 
 			function nextSlide() {
@@ -352,12 +357,6 @@ const fullScreenSlider = () => {
 			}
 		}
 	});
-
-
-
-
-
-
 }
 
 //Init functions

@@ -343,11 +343,9 @@ body.fixed {
 	    -ms-flex-pack: center;
 	        justify-content: center;
 	cursor: pointer;
-	border-radius: 1rem;
+	border-radius: 0.8rem;
 	-webkit-transition: all 0.3s ease-in-out;
 	transition: all 0.3s ease-in-out;
-}
-.fullscreen-container .close-btn:hover {
 	background: rgba(0, 0, 0, 0.2);
 }
 
