@@ -216,6 +216,12 @@ body.fixed {
 	    -ms-flex-pack: center;
 	        justify-content: center;
 	z-index: 10;
+	display: none;
+}
+.fullscreen-container.visible {
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
 }
 .fullscreen-container .fullscreen-bg {
 	position: absolute;

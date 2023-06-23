@@ -174,139 +174,40 @@ const ImageZoom = () => {
 const fullScreenSlider = () => {
 	const containers = document.querySelectorAll('.zoom-container');
 
+	createFullScreenSlider();
+
 	[...containers].forEach(container => {
-		container.addEventListener('click', (e) => {
-			createFullScreenSlider(e);
-
+		container.addEventListener('click', () => {
 			document.body.classList.add('fixed');
+			document.querySelector('.fullscreen-container').classList.add('visible');
 
-			closeSlider();
-			sliderInteractions()
+			imgSlider([...containers]);
+			sliderInteractions();
 		})
 
-		function createFullScreenSlider(e) {
-			//Add slider container
-			const fullScreenContainer = document.createElement('div');
-			fullScreenContainer.classList.add('fullscreen-container');
-			const fullScreenBg = document.createElement('div');
-			fullScreenBg.classList.add('fullscreen-bg');
-			const fullScreenSlider = document.createElement('div');
-			fullScreenSlider.classList.add('fullScreen-slider');
-			const sliderWrapper = document.createElement('div');
-			sliderWrapper.classList.add('slider-wrapper');
+		function imgSlider(containers) {
+			const sliderWrapper = document.querySelector('.fullScreen-slider .slider-wrapper');
 
-			//Add slider arrows
-			const [sliderArrowsContainer, arrowRight, arrowLeft, arrowWrapperRight, arrowWrapperLeft] = createArrows();
-
-			//Add slider Close
-			const closeBtn = createCloseBtn();
-
-			//Add slider container to page
-			document.body.appendChild(fullScreenContainer);
-			fullScreenContainer.appendChild(fullScreenBg);
-			fullScreenContainer.appendChild(fullScreenSlider);
-			fullScreenSlider.appendChild(sliderWrapper);
-			fullScreenSlider.appendChild(sliderArrowsContainer);
-			fullScreenSlider.appendChild(closeBtn);
-			sliderArrowsContainer.appendChild(arrowWrapperRight);
-			sliderArrowsContainer.appendChild(arrowWrapperLeft);
-			arrowWrapperRight.appendChild(arrowRight);
-			arrowWrapperLeft.appendChild(arrowLeft);
-			arrowRight.appendChild(arrowSvg(arrowWrapperRight));
-			arrowLeft.appendChild(arrowSvg(arrowWrapperLeft));
-
-			imgSlider([...containers], sliderWrapper);
-		}
-
-		function createArrows() {
-			const sliderArrowsContainer = document.createElement('div');
-			sliderArrowsContainer.classList.add('slider-arrows');
-
-			const arrowWrapperRight = document.createElement('div');
-			arrowWrapperRight.classList.add('arrow-wrapper');
-			arrowWrapperRight.classList.add('arrow-right');
-
-			const arrowWrapperLeft = document.createElement('div');
-			arrowWrapperLeft.classList.add('arrow-wrapper');
-			arrowWrapperLeft.classList.add('arrow-left');
-
-			const arrowRight = document.createElement('div');
-			const arrowLeft = document.createElement('div');
-
-			return [sliderArrowsContainer, arrowRight, arrowLeft, arrowWrapperRight, arrowWrapperLeft];
-		}
-
-		function arrowSvg(arrow) {
-			const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-			const iconPath = document.createElementNS(
-				'http://www.w3.org/2000/svg',
-				'path'
-			);
-			svg.setAttribute('viewBox', '0 0 24 24');
-			iconPath.setAttribute('fill', 'rgb(200, 200, 200)');
-
-			arrow.classList.contains('arrow-right')
-				? iconPath.setAttribute(
-					'd',
-					'M15.4 12.97l-2.68 2.72 1.34 1.38L19 12l-4.94-5.07-1.34 1.38 2.68 2.72H5v1.94z'
-				)
-				: iconPath.setAttribute(
-					'd',
-					'M11.28 15.7l-1.34 1.37L5 12l4.94-5.07 1.34 1.38-2.68 2.72H19v1.94H8.6z'
-				)
-
-			svg.appendChild(iconPath);
-			return svg;
-		}
-
-		function createCloseBtn() {
-			const sliderClose = document.createElement('div');
-			sliderClose.classList.add('close-btn');
-
-			const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-			const iconPath = document.createElementNS(
-				'http://www.w3.org/2000/svg',
-				'path'
-			);
-			svg.setAttribute('viewBox', '0 0 24 24');
-			svg.setAttribute('width', '24');
-			svg.setAttribute('height', '24');
-			iconPath.setAttribute('fill', '#000');
-			iconPath.setAttribute(
-				'd',
-				'M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z'
-			)
-			svg.appendChild(iconPath);
-			sliderClose.appendChild(svg);
-			return sliderClose;
-		}
-
-		function imgSlider(containers, sliderWrapper) {
-			containers.forEach((container, i) => {
+			containers.forEach(container => {
 				const slide = document.createElement('div');
 				slide.classList.add('slider-slide');
 				const slideImg = document.createElement('img');
 				slideImg.classList.add('slide-img');
 
-				const parentImg = container.querySelector('img');
+				const parentImg = container.querySelector('.zoom-image');
 
-				slide.setAttribute('aria-order', i);
 				slideImg.src = `${parentImg.src}`;
 
 				sliderWrapper.appendChild(slide);
 				slide.appendChild(slideImg);
 			});
+
 		}
 
 		function closeSlider() {
-			const fullScreenSlider = document.querySelector('.fullscreen-container');
-
-			fullScreenSlider.addEventListener('click', function (e) {
-				if (!e.target.closest('.fullScreen-slider')) {
-					fullScreenSlider.remove()
-					document.body.classList.remove('fixed');
-				}
-			});
+			document.body.classList.remove('fixed');
+			document.querySelector('.fullscreen-container').classList.remove('visible');
+			document.querySelectorAll('.fullscreen-container .slider-slide').forEach(slide => slide.remove());
 		}
 
 		function sliderInteractions() {
@@ -321,7 +222,6 @@ const fullScreenSlider = () => {
 
 			slider.addEventListener('wheel', function (e) {
 				e.preventDefault();
-				console.log(compWidth, compMarginRight);
 				(e.deltaY < 0) ? previousSlide() : nextSlide()
 			});
 
@@ -337,11 +237,11 @@ const fullScreenSlider = () => {
 				});
 			});
 
-			slider.querySelector('.close-btn').addEventListener('click', () => {
-				document.querySelector('.fullscreen-container').remove()
-				document.body.classList.remove('fixed');
-			});
+			slider.querySelector('.close-btn').addEventListener('click', closeSlider);
 
+			document.querySelector('.fullscreen-container.visible').addEventListener('click', function (e) {
+				if (!e.target.closest('.fullScreen-slider')) closeSlider()
+			});
 			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * (compWidth + compMarginRight)}px)`
 
 			function nextSlide() {
@@ -357,6 +257,103 @@ const fullScreenSlider = () => {
 			}
 		}
 	});
+
+
+	function createFullScreenSlider() {
+		//Add slider container
+		const fullScreenContainer = document.createElement('div');
+		fullScreenContainer.classList.add('fullscreen-container');
+		const fullScreenBg = document.createElement('div');
+		fullScreenBg.classList.add('fullscreen-bg');
+		const fullScreenSlider = document.createElement('div');
+		fullScreenSlider.classList.add('fullScreen-slider');
+		const sliderWrapper = document.createElement('div');
+		sliderWrapper.classList.add('slider-wrapper');
+
+		//Add slider arrows
+		const [sliderArrowsContainer, arrowRight, arrowLeft, arrowWrapperRight, arrowWrapperLeft] = createArrows();
+
+		//Add slider Close
+		const closeBtn = createCloseBtn();
+
+		//Add slider container to page
+		document.body.appendChild(fullScreenContainer);
+		fullScreenContainer.appendChild(fullScreenBg);
+		fullScreenContainer.appendChild(fullScreenSlider);
+		fullScreenSlider.appendChild(sliderWrapper);
+		fullScreenSlider.appendChild(sliderArrowsContainer);
+		fullScreenSlider.appendChild(closeBtn);
+		sliderArrowsContainer.appendChild(arrowWrapperRight);
+		sliderArrowsContainer.appendChild(arrowWrapperLeft);
+		arrowWrapperRight.appendChild(arrowRight);
+		arrowWrapperLeft.appendChild(arrowLeft);
+		arrowRight.appendChild(arrowSvg(arrowWrapperRight));
+		arrowLeft.appendChild(arrowSvg(arrowWrapperLeft));
+	}
+
+	function createArrows() {
+		const sliderArrowsContainer = document.createElement('div');
+		sliderArrowsContainer.classList.add('slider-arrows');
+
+		const arrowWrapperRight = document.createElement('div');
+		arrowWrapperRight.classList.add('arrow-wrapper');
+		arrowWrapperRight.classList.add('arrow-right');
+
+		const arrowWrapperLeft = document.createElement('div');
+		arrowWrapperLeft.classList.add('arrow-wrapper');
+		arrowWrapperLeft.classList.add('arrow-left');
+
+		const arrowRight = document.createElement('div');
+		const arrowLeft = document.createElement('div');
+
+		return [sliderArrowsContainer, arrowRight, arrowLeft, arrowWrapperRight, arrowWrapperLeft];
+	}
+
+	function arrowSvg(arrow) {
+		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		const iconPath = document.createElementNS(
+			'http://www.w3.org/2000/svg',
+			'path'
+		);
+		svg.setAttribute('viewBox', '0 0 24 24');
+		iconPath.setAttribute('fill', 'rgb(200, 200, 200)');
+
+		arrow.classList.contains('arrow-right')
+			? iconPath.setAttribute(
+				'd',
+				'M15.4 12.97l-2.68 2.72 1.34 1.38L19 12l-4.94-5.07-1.34 1.38 2.68 2.72H5v1.94z'
+			)
+			: iconPath.setAttribute(
+				'd',
+				'M11.28 15.7l-1.34 1.37L5 12l4.94-5.07 1.34 1.38-2.68 2.72H19v1.94H8.6z'
+			)
+
+		svg.appendChild(iconPath);
+		return svg;
+	}
+
+	function createCloseBtn() {
+		const sliderClose = document.createElement('div');
+		sliderClose.classList.add('close-btn');
+
+		const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		const iconPath = document.createElementNS(
+			'http://www.w3.org/2000/svg',
+			'path'
+		);
+		svg.setAttribute('viewBox', '0 0 24 24');
+		svg.setAttribute('width', '24');
+		svg.setAttribute('height', '24');
+		iconPath.setAttribute('fill', '#000');
+		iconPath.setAttribute(
+			'd',
+			'M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z'
+		)
+		svg.appendChild(iconPath);
+		sliderClose.appendChild(svg);
+		return sliderClose;
+	}
+
 }
 
 //Init functions
