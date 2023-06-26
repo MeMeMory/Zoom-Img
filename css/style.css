@@ -78,7 +78,8 @@ body {
 	background-color: white;
 	font-family: "Montserrat";
 	overflow-x: hidden;
-	overflow-y: scroll;
+	overflow-y: auto;
+	scrollbar-gutter: stable;
 }
 body.fixed {
 	overflow: hidden;

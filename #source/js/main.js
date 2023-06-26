@@ -73,17 +73,6 @@ const ImageZoom = () => {
 			zoomedImgContainer.classList.add('zoomed-container');
 			document.querySelector('body').appendChild(zoomedImgContainer);
 			let containerRect = document.querySelector('.zoom-wrapper').getBoundingClientRect();
-			/*			let imgWidths = []
-						let imgHeights = [];
-			
-						[...containers].forEach(el => {
-							const imgRect = el.querySelector('img').getBoundingClientRect();
-							imgWidths.push(imgRect.width);
-							imgHeights.push(imgRect.height);
-						});
-			
-						zoomedImgContainer.style.width = `${Math.max(...imgWidths)}px`;
-						zoomedImgContainer.style.height = `${Math.max(...imgHeights)}px`;*/
 
 			zoomedImgContainer.style.width = `${containerRect.width}px`;
 			zoomedImgContainer.style.height = `${containerRect.height}px`;
@@ -177,12 +166,12 @@ const fullScreenSlider = () => {
 	createFullScreenSlider();
 
 	[...containers].forEach(container => {
-		container.addEventListener('click', () => {
+		container.addEventListener('click', (e) => {
 			document.body.classList.add('fixed');
 			document.querySelector('.fullscreen-container').classList.add('visible');
 
 			imgSlider([...containers]);
-			sliderInteractions();
+			sliderInteractions(e.target);
 		})
 
 		function imgSlider(containers) {
@@ -210,7 +199,7 @@ const fullScreenSlider = () => {
 			document.querySelectorAll('.fullscreen-container .slider-slide').forEach(slide => slide.remove());
 		}
 
-		function sliderInteractions() {
+		function sliderInteractions(target) {
 			const slider = document.querySelector('.fullScreen-slider');
 			const sliderWrapper = slider.querySelector('.slider-wrapper');
 			const sliderSlides = slider.querySelectorAll('.slider-slide');
@@ -220,6 +209,7 @@ const fullScreenSlider = () => {
 			const compMarginRight = Number(computed.marginRight.slice(0, -2))
 			let currentIndex = 0;
 
+
 			slider.addEventListener('wheel', function (e) {
 				e.preventDefault();
 				(e.deltaY < 0) ? previousSlide() : nextSlide()
@@ -227,22 +217,22 @@ const fullScreenSlider = () => {
 
 			sliderArrows.forEach(arr => {
 				arr.addEventListener('click', (e) => {
-					e.stopPropagation();
-					if (e.target.classList.contains('arrow-right')) {
-						nextSlide()
-					}
-					if (e.target.classList.contains('arrow-left')) {
-						previousSlide()
-					}
+					if (e.target.classList.contains('arrow-right')) nextSlide()
+					if (e.target.classList.contains('arrow-left')) previousSlide()
 				});
 			});
 
-			slider.querySelector('.close-btn').addEventListener('click', closeSlider);
+			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * (compWidth + compMarginRight)}px)`;
 
-			document.querySelector('.fullscreen-container.visible').addEventListener('click', function (e) {
-				if (!e.target.closest('.fullScreen-slider')) closeSlider()
-			});
-			const showSlide = (index) => sliderWrapper.style.transform = `translateX(-${index * (compWidth + compMarginRight)}px)`
+			// Show slide which click on
+			(function showTarget(target) {
+				sliderWrapper.querySelectorAll('img').forEach((img, i) => {
+					if (img.src == target.src) {
+						currentIndex = i
+						showSlide(i)
+					}
+				})
+			})(target);
 
 			function nextSlide() {
 				currentIndex++;
@@ -255,6 +245,12 @@ const fullScreenSlider = () => {
 				if (currentIndex < 0) currentIndex = sliderSlides.length - 1;
 				showSlide(currentIndex);
 			}
+
+			// Close slider
+			slider.querySelector('.close-btn').addEventListener('click', closeSlider);
+			document.querySelector('.fullscreen-container.visible').addEventListener('click', function (e) {
+				if (!e.target.closest('.fullScreen-slider')) closeSlider()
+			});
 		}
 	});
 
@@ -344,7 +340,7 @@ const fullScreenSlider = () => {
 		svg.setAttribute('viewBox', '0 0 24 24');
 		svg.setAttribute('width', '24');
 		svg.setAttribute('height', '24');
-		iconPath.setAttribute('fill', '#000');
+		iconPath.setAttribute('fill', 'rgb(200, 200, 200)');
 		iconPath.setAttribute(
 			'd',
 			'M 4.7070312 3.2929688 L 3.2929688 4.7070312 L 10.585938 12 L 3.2929688 19.292969 L 4.7070312 20.707031 L 12 13.414062 L 19.292969 20.707031 L 20.707031 19.292969 L 13.414062 12 L 20.707031 4.7070312 L 19.292969 3.2929688 L 12 10.585938 L 4.7070312 3.2929688 z'
@@ -353,7 +349,6 @@ const fullScreenSlider = () => {
 		sliderClose.appendChild(svg);
 		return sliderClose;
 	}
-
 }
 
 //Init functions
