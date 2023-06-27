@@ -1,3 +1,4 @@
+//Zoom lens
 const ImageZoom = () => {
 	const containers = document.querySelectorAll('.zoom-container');
 
@@ -27,9 +28,14 @@ const ImageZoom = () => {
 		zoomedImgContainerPosSize();
 
 		containerImg.addEventListener('mouseenter', () => {
+			if (window.innerWidth < 1199.98) {
+				removeSlider()
+				return;
+			}
 			zoomedImgContainer.classList.add('mouse-over');
 			container.classList.add('mouse-over');
 			zoomedImg.style.display = 'block';
+			zoomedImgContainer.style.display = 'flex';
 
 			containerImg.addEventListener('mousemove', getSetLensPos);
 			containerImg.addEventListener('wheel', zoomImage);
@@ -153,6 +159,7 @@ const ImageZoom = () => {
 			zoomedImgContainer.classList.remove('mouse-over');
 			container.classList.remove('mouse-over');
 			zoomedImg.style.display = 'none';
+			zoomedImgContainer.style.display = 'none';
 
 			containerImg.removeEventListener('mousemove', getSetLensPos);
 			containerImg.removeEventListener('wheel', zoomImage);
@@ -160,6 +167,7 @@ const ImageZoom = () => {
 	});
 };
 
+//Zoom lens	full-screen slider
 const fullScreenSlider = () => {
 	const containers = document.querySelectorAll('.zoom-container');
 
@@ -253,7 +261,6 @@ const fullScreenSlider = () => {
 			});
 		}
 	});
-
 
 	function createFullScreenSlider() {
 		//Add slider container
@@ -351,7 +358,7 @@ const fullScreenSlider = () => {
 	}
 }
 
-//Init functions
+//Init functions: Zoom lens, Zoom lens	full-screen slider
 window.addEventListener('load', () => {
 	if (window.innerWidth > 1199.98) {
 		setTimeout(() => {
